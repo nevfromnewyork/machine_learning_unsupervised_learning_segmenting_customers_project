@@ -1,0 +1,76 @@
+# Segmenting Customers
+
+You have been asked to review how the customer ratings data looks when modeled with 3 and 4 clusters.
+
+Using the information contained in this notebook, apply the K-means algrothim to the service_ratings data using both 3 and 4 clusters to segment the customer information.
+# Import the modules
+import pandas as pd
+from pathlib import Path
+import hvplot.pandas
+
+# Import the K-means algorithm
+from sklearn.cluster import KMeans
+# Read in the CSV file as a Pandas DataFrame
+service_ratings_df = pd.read_csv(
+    Path("../Resources/service_ratings.csv")
+)
+
+# Review the DataFrame
+service_ratings_df.head()
+# Visualize a scatter plot of the data
+service_ratings_df.hvplot.scatter(
+    x="mobile_app_rating", 
+    y="personal_banker_rating"
+)
+## Run the k-means model with 3 clusters
+# Create and initialize the K-means model instance for 3 clusters
+model = KMeans(n_clusters=3, random_state=1)
+
+# Print the model
+model
+# Fit the data to the instance of the model
+model.fit(service_ratings_df)
+# Make predictions about the data clusters using the trained model
+customer_segment_3 = model.predict(service_ratings_df)
+
+# Print the predictions
+print(customer_segment_3)
+# Add a column to the DataFrame that contains the customer_segment information
+service_ratings_df['customer_segment_3'] = customer_segment_3
+
+# Review the DataFrame
+service_ratings_df.head()
+# Plot the data points based on the customer rating
+service_ratings_df.hvplot.scatter(
+    x="mobile_app_rating", 
+    y="personal_banker_rating", 
+    by="customer_segment_3"
+)
+## Run the k-means model with 4 clusters
+# Create and initialize the K-means model instance for 4 clusters
+model = KMeans(n_clusters=4, random_state=1)
+
+# Print the model
+model
+# Fit the data to the instance of the model
+model.fit(service_ratings_df)
+# Make predictions about the data clusters using the trained model
+customer_segment_4 = model.predict(service_ratings_df)
+
+# Print the predictions
+print(customer_segment_4)
+# Add a column to the DataFrame that contains the customer_segment information
+service_ratings_df['customer_segment_4'] = customer_segment_4
+
+# Review the DataFrame
+service_ratings_df.head()
+# Plot the data points based on the customer rating
+service_ratings_df.hvplot.scatter(
+    x="mobile_app_rating", 
+    y="personal_banker_rating", 
+    by="customer_segment_4"
+)
+## Answer the following question
+**Question:** Can any additional information be gleaned from the customer segmentation data when clusters of 3 and 4 are applied?
+
+**Answers:** Segmenting the data into 4 clusters was quite insightful. What is designated as cluster 3, customers with the highest personal banker service ratings, really rated service received through the mobile application quite poorly. Those users will either continue to consume in-person banking services, or they should be contacted for additional assistance on using the mobile application.  
